@@ -1,0 +1,79 @@
+Package sarapatel;
+
+Helpers
+ tudo = [0 .. 0xFFFF];
+ digito = ['0' .. '9'];
+ binario = '0b' ['0' .. '9']+;
+ 
+ letra = ['a' .. 'z'] | ['A' .. 'Z'];
+ espaco = ' ';
+ underscore = '_';
+ rc = 13;
+ nl = 10;
+ eol = rc nl | rc | nl;
+ senao = 'senao';
+ tudo_menos_rc = [tudo - rc];
+ tudo_menos_rc_nl = [tudo - [rc + nl]];
+ 
+ coment_linha = '--' tudo_menos_rc_nl* eol; 
+ coment_bloco = '{' [tudo - '}']* '}';
+ comentario = coment_linha | coment_bloco;
+ 
+ vazio = (espaco | rc | nl)+;
+ 
+Tokens
+ numero = ('-'?digito+) | binario;
+ decimal = digito+ ',' digito+;
+ 
+ // OPERADORES E SIMBOLOS
+ ponto_virgula = ';';
+ col_esq = '[';
+ col_dir = ']';
+ par_esq = '(';
+ par_dir = ')';
+ soma = '+';
+ menos = '-';
+ mult = '*';
+ div = '/';
+ mod = '%';
+ maior_q = '>';
+ maior_igual = '>=';
+ igual = '=';
+ e = 'e';
+ ou = 'ou';
+ nao = 'nao';
+ separador = '|';
+ dois_pontos = ':';
+ atribuicao = '<<';
+ proced_principal = '>>';
+
+ // PALAVRAS RESERVADAS
+ var = 'var';
+ const = 'const';
+ tipo_inteiro = 'inteiro';
+ tipo_real = 'real';
+ tipo_booleano = 'booleano';
+ tipo_cadeia = 'cadeia';
+ ini_bloco = 'comece';
+ fim_bloco = 'termine';
+ enquanto = 'enquanto';
+ se = 'se';
+ senao = 'senao';
+ verdadeiro = 'verdadeiro';
+ falso = 'falso';
+ funcao = 'funcao';
+ procedimento = 'procedimento';
+ 
+ tipo_array = 'inteiro' | 'real' | 'booleano' | 'cadeia' ( '[' (digito+ | binario) ']' )+;
+ 
+ id = (letra | underscore | 'size' | 'imprima' | 'leia')(letra | underscore | digito)*;
+
+ cadeia = ''' ([tudo_menos_rc - '''])+ ''';
+ 
+ vazio = vazio;
+ comentario = comentario;
+ 
+Ignored Tokens
+ vazio,
+ comentario;
+ 
