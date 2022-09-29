@@ -2,7 +2,7 @@
 
 package node;
 
-public abstract class PDecs extends Node
+public abstract class PChamadaFuncao extends Node
 {
     // Empty body
 }

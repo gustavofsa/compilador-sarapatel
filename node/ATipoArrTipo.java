@@ -5,26 +5,26 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ATipoTipo extends PTipo
+public final class ATipoArrTipo extends PTipo
 {
-    private PTipo _tipo_;
+    private PTipoBase _tipoBase_;
     private TColEsq _colEsq_;
     private PExp _exp_;
     private TColDir _colDir_;
 
-    public ATipoTipo()
+    public ATipoArrTipo()
     {
         // Constructor
     }
 
-    public ATipoTipo(
-        @SuppressWarnings("hiding") PTipo _tipo_,
+    public ATipoArrTipo(
+        @SuppressWarnings("hiding") PTipoBase _tipoBase_,
         @SuppressWarnings("hiding") TColEsq _colEsq_,
         @SuppressWarnings("hiding") PExp _exp_,
         @SuppressWarnings("hiding") TColDir _colDir_)
     {
         // Constructor
-        setTipo(_tipo_);
+        setTipoBase(_tipoBase_);
 
         setColEsq(_colEsq_);
 
@@ -37,8 +37,8 @@ public final class ATipoTipo extends PTipo
     @Override
     public Object clone()
     {
-        return new ATipoTipo(
-            cloneNode(this._tipo_),
+        return new ATipoArrTipo(
+            cloneNode(this._tipoBase_),
             cloneNode(this._colEsq_),
             cloneNode(this._exp_),
             cloneNode(this._colDir_));
@@ -47,19 +47,19 @@ public final class ATipoTipo extends PTipo
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseATipoTipo(this);
+        ((Analysis) sw).caseATipoArrTipo(this);
     }
 
-    public PTipo getTipo()
+    public PTipoBase getTipoBase()
     {
-        return this._tipo_;
+        return this._tipoBase_;
     }
 
-    public void setTipo(PTipo node)
+    public void setTipoBase(PTipoBase node)
     {
-        if(this._tipo_ != null)
+        if(this._tipoBase_ != null)
         {
-            this._tipo_.parent(null);
+            this._tipoBase_.parent(null);
         }
 
         if(node != null)
@@ -72,7 +72,7 @@ public final class ATipoTipo extends PTipo
             node.parent(this);
         }
 
-        this._tipo_ = node;
+        this._tipoBase_ = node;
     }
 
     public TColEsq getColEsq()
@@ -154,7 +154,7 @@ public final class ATipoTipo extends PTipo
     public String toString()
     {
         return ""
-            + toString(this._tipo_)
+            + toString(this._tipoBase_)
             + toString(this._colEsq_)
             + toString(this._exp_)
             + toString(this._colDir_);
@@ -164,9 +164,9 @@ public final class ATipoTipo extends PTipo
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._tipo_ == child)
+        if(this._tipoBase_ == child)
         {
-            this._tipo_ = null;
+            this._tipoBase_ = null;
             return;
         }
 
@@ -195,9 +195,9 @@ public final class ATipoTipo extends PTipo
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._tipo_ == oldChild)
+        if(this._tipoBase_ == oldChild)
         {
-            setTipo((PTipo) newChild);
+            setTipoBase((PTipoBase) newChild);
             return;
         }
 

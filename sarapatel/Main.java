@@ -1,5 +1,4 @@
 package sarapatel;
-import sarapatel.analysis.DepthFirstAdapter;
 import sarapatel.lexer.*;
 import sarapatel.parser.*;
 import sarapatel.node.*;
@@ -27,7 +26,7 @@ public class Main
 
 
 			   // Apply the translation.
-			   tree.apply(new DepthFirstAdapter());
+			   tree.apply(new ASTDisplay());
 		}
 		catch(Exception e)
 		{

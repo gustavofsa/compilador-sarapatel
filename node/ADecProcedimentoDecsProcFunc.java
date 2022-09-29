@@ -5,46 +5,46 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ADecVarDecs extends PDecs
+public final class ADecProcedimentoDecsProcFunc extends PDecsProcFunc
 {
-    private PDecVar _decVar_;
+    private PDecProcedimento _decProcedimento_;
 
-    public ADecVarDecs()
+    public ADecProcedimentoDecsProcFunc()
     {
         // Constructor
     }
 
-    public ADecVarDecs(
-        @SuppressWarnings("hiding") PDecVar _decVar_)
+    public ADecProcedimentoDecsProcFunc(
+        @SuppressWarnings("hiding") PDecProcedimento _decProcedimento_)
     {
         // Constructor
-        setDecVar(_decVar_);
+        setDecProcedimento(_decProcedimento_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ADecVarDecs(
-            cloneNode(this._decVar_));
+        return new ADecProcedimentoDecsProcFunc(
+            cloneNode(this._decProcedimento_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseADecVarDecs(this);
+        ((Analysis) sw).caseADecProcedimentoDecsProcFunc(this);
     }
 
-    public PDecVar getDecVar()
+    public PDecProcedimento getDecProcedimento()
     {
-        return this._decVar_;
+        return this._decProcedimento_;
     }
 
-    public void setDecVar(PDecVar node)
+    public void setDecProcedimento(PDecProcedimento node)
     {
-        if(this._decVar_ != null)
+        if(this._decProcedimento_ != null)
         {
-            this._decVar_.parent(null);
+            this._decProcedimento_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class ADecVarDecs extends PDecs
             node.parent(this);
         }
 
-        this._decVar_ = node;
+        this._decProcedimento_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._decVar_);
+            + toString(this._decProcedimento_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._decVar_ == child)
+        if(this._decProcedimento_ == child)
         {
-            this._decVar_ = null;
+            this._decProcedimento_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class ADecVarDecs extends PDecs
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._decVar_ == oldChild)
+        if(this._decProcedimento_ == oldChild)
         {
-            setDecVar((PDecVar) newChild);
+            setDecProcedimento((PDecProcedimento) newChild);
             return;
         }
 

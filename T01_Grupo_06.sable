@@ -103,7 +103,7 @@ Ignored Tokens
  
  tipo = 
   {tipo_base} tipo_base 
- |{tipo} tipo col_esq exp col_dir;
+ |{tipo_arr} tipo_base col_esq exp col_dir;
  
  tipo_base = 
   {tipo_inteiro} tipo_inteiro 
@@ -151,7 +151,41 @@ Ignored Tokens
    {id} id 
   |{valor} valor col_esq exp col_dir;
   
+// bloco_comandos = ini_bloco dec_var_const* comando* fim_bloco;
+  chamada_funcao = id par_esq lista_exp par_dir;
+  
+  chamada_procedimento = id par_esq lista_exp par_dir;
+  
+  lista_exp = 
+  	{exp_ini} exp separador_exp*
+  	|{vazio} ;
+  
+  separador_exp = separador exp;
+  
   bloco_expressoes = ini_bloco dec_cons* exp fim_bloco;
+  
+  comando_mae = 
+      {comando_se} comando_se
+      | {tudo_menos_se} tudo_menos_se;
+  
+  comando_se = 
+    {casam_decl1} casam_decl
+    | {sem_casam_decl1} sem_casam_decl
+    | {outra} tudo_menos_se;
+  
+  sem_casam_decl = 
+  	{sem_casam_decl1} se par_esq exp par_dir comando_mae
+  	|{sem_casam_decl2} se par_esq exp par_dir casam_decl senao sem_casam_decl;
+  	
+  casam_decl = 
+    {casa_decl1} se par_esq exp par_dir casa_decl1 senao casa_decl1
+    | {casa_decl2} tudo_menos_se;
+  
+  tudo_menos_se = 
+  	{outra1} enquanto par_esq exp par_dir comando_mae
+  	|{outra2} id_atribuicao ponto_virgula
+  	|{outra3} chamada_procedimento ponto_virgula
+  	|{outra4} bloco_comandos;
   
   exp =
    {fator} fator 
@@ -167,7 +201,6 @@ Ignored Tokens
  termo =
    {numero} numero 
   |{exp} par_esq exp par_dir;
- 
  
  
  

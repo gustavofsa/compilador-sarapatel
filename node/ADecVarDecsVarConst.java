@@ -5,46 +5,46 @@ package node;
 import analysis.*;
 
 @SuppressWarnings("nls")
-public final class ADecConsDecs extends PDecs
+public final class ADecVarDecsVarConst extends PDecsVarConst
 {
-    private PDecCons _decCons_;
+    private PDecVar _decVar_;
 
-    public ADecConsDecs()
+    public ADecVarDecsVarConst()
     {
         // Constructor
     }
 
-    public ADecConsDecs(
-        @SuppressWarnings("hiding") PDecCons _decCons_)
+    public ADecVarDecsVarConst(
+        @SuppressWarnings("hiding") PDecVar _decVar_)
     {
         // Constructor
-        setDecCons(_decCons_);
+        setDecVar(_decVar_);
 
     }
 
     @Override
     public Object clone()
     {
-        return new ADecConsDecs(
-            cloneNode(this._decCons_));
+        return new ADecVarDecsVarConst(
+            cloneNode(this._decVar_));
     }
 
     @Override
     public void apply(Switch sw)
     {
-        ((Analysis) sw).caseADecConsDecs(this);
+        ((Analysis) sw).caseADecVarDecsVarConst(this);
     }
 
-    public PDecCons getDecCons()
+    public PDecVar getDecVar()
     {
-        return this._decCons_;
+        return this._decVar_;
     }
 
-    public void setDecCons(PDecCons node)
+    public void setDecVar(PDecVar node)
     {
-        if(this._decCons_ != null)
+        if(this._decVar_ != null)
         {
-            this._decCons_.parent(null);
+            this._decVar_.parent(null);
         }
 
         if(node != null)
@@ -57,23 +57,23 @@ public final class ADecConsDecs extends PDecs
             node.parent(this);
         }
 
-        this._decCons_ = node;
+        this._decVar_ = node;
     }
 
     @Override
     public String toString()
     {
         return ""
-            + toString(this._decCons_);
+            + toString(this._decVar_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._decCons_ == child)
+        if(this._decVar_ == child)
         {
-            this._decCons_ = null;
+            this._decVar_ = null;
             return;
         }
 
@@ -84,9 +84,9 @@ public final class ADecConsDecs extends PDecs
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        if(this._decCons_ == oldChild)
+        if(this._decVar_ == oldChild)
         {
-            setDecCons((PDecCons) newChild);
+            setDecVar((PDecVar) newChild);
             return;
         }
 

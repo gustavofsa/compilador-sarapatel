@@ -8,8 +8,8 @@ import analysis.*;
 @SuppressWarnings("nls")
 public final class APrograma extends PPrograma
 {
-    private final LinkedList<PDecs> _decs_ = new LinkedList<PDecs>();
-    private final LinkedList<PExp> _exp_ = new LinkedList<PExp>();
+    private final LinkedList<PDecsVarConst> _decsVarConst_ = new LinkedList<PDecsVarConst>();
+    private final LinkedList<PDecsProcFunc> _decsProcFunc_ = new LinkedList<PDecsProcFunc>();
 
     public APrograma()
     {
@@ -17,13 +17,13 @@ public final class APrograma extends PPrograma
     }
 
     public APrograma(
-        @SuppressWarnings("hiding") List<?> _decs_,
-        @SuppressWarnings("hiding") List<?> _exp_)
+        @SuppressWarnings("hiding") List<?> _decsVarConst_,
+        @SuppressWarnings("hiding") List<?> _decsProcFunc_)
     {
         // Constructor
-        setDecs(_decs_);
+        setDecsVarConst(_decsVarConst_);
 
-        setExp(_exp_);
+        setDecsProcFunc(_decsProcFunc_);
 
     }
 
@@ -31,8 +31,8 @@ public final class APrograma extends PPrograma
     public Object clone()
     {
         return new APrograma(
-            cloneList(this._decs_),
-            cloneList(this._exp_));
+            cloneList(this._decsVarConst_),
+            cloneList(this._decsProcFunc_));
     }
 
     @Override
@@ -41,55 +41,55 @@ public final class APrograma extends PPrograma
         ((Analysis) sw).caseAPrograma(this);
     }
 
-    public LinkedList<PDecs> getDecs()
+    public LinkedList<PDecsVarConst> getDecsVarConst()
     {
-        return this._decs_;
+        return this._decsVarConst_;
     }
 
-    public void setDecs(List<?> list)
+    public void setDecsVarConst(List<?> list)
     {
-        for(PDecs e : this._decs_)
+        for(PDecsVarConst e : this._decsVarConst_)
         {
             e.parent(null);
         }
-        this._decs_.clear();
+        this._decsVarConst_.clear();
 
         for(Object obj_e : list)
         {
-            PDecs e = (PDecs) obj_e;
+            PDecsVarConst e = (PDecsVarConst) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._decs_.add(e);
+            this._decsVarConst_.add(e);
         }
     }
 
-    public LinkedList<PExp> getExp()
+    public LinkedList<PDecsProcFunc> getDecsProcFunc()
     {
-        return this._exp_;
+        return this._decsProcFunc_;
     }
 
-    public void setExp(List<?> list)
+    public void setDecsProcFunc(List<?> list)
     {
-        for(PExp e : this._exp_)
+        for(PDecsProcFunc e : this._decsProcFunc_)
         {
             e.parent(null);
         }
-        this._exp_.clear();
+        this._decsProcFunc_.clear();
 
         for(Object obj_e : list)
         {
-            PExp e = (PExp) obj_e;
+            PDecsProcFunc e = (PDecsProcFunc) obj_e;
             if(e.parent() != null)
             {
                 e.parent().removeChild(e);
             }
 
             e.parent(this);
-            this._exp_.add(e);
+            this._decsProcFunc_.add(e);
         }
     }
 
@@ -97,20 +97,20 @@ public final class APrograma extends PPrograma
     public String toString()
     {
         return ""
-            + toString(this._decs_)
-            + toString(this._exp_);
+            + toString(this._decsVarConst_)
+            + toString(this._decsProcFunc_);
     }
 
     @Override
     void removeChild(@SuppressWarnings("unused") Node child)
     {
         // Remove child
-        if(this._decs_.remove(child))
+        if(this._decsVarConst_.remove(child))
         {
             return;
         }
 
-        if(this._exp_.remove(child))
+        if(this._decsProcFunc_.remove(child))
         {
             return;
         }
@@ -122,13 +122,13 @@ public final class APrograma extends PPrograma
     void replaceChild(@SuppressWarnings("unused") Node oldChild, @SuppressWarnings("unused") Node newChild)
     {
         // Replace child
-        for(ListIterator<PDecs> i = this._decs_.listIterator(); i.hasNext();)
+        for(ListIterator<PDecsVarConst> i = this._decsVarConst_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PDecs) newChild);
+                    i.set((PDecsVarConst) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;
@@ -140,13 +140,13 @@ public final class APrograma extends PPrograma
             }
         }
 
-        for(ListIterator<PExp> i = this._exp_.listIterator(); i.hasNext();)
+        for(ListIterator<PDecsProcFunc> i = this._decsProcFunc_.listIterator(); i.hasNext();)
         {
             if(i.next() == oldChild)
             {
                 if(newChild != null)
                 {
-                    i.set((PExp) newChild);
+                    i.set((PDecsProcFunc) newChild);
                     newChild.parent(this);
                     oldChild.parent(null);
                     return;

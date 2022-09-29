@@ -81,13 +81,25 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseADecVarDecs(ADecVarDecs node)
+    public void caseADecVarDecsVarConst(ADecVarDecsVarConst node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseADecConsDecs(ADecConsDecs node)
+    public void caseADecConsDecsVarConst(ADecConsDecsVarConst node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADecProcedimentoDecsProcFunc(ADecProcedimentoDecsProcFunc node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADecFuncaoDecsProcFunc(ADecFuncaoDecsProcFunc node)
     {
         defaultCase(node);
     }
@@ -123,7 +135,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseATipoTipo(ATipoTipo node)
+    public void caseATipoArrTipo(ATipoArrTipo node)
     {
         defaultCase(node);
     }
@@ -160,6 +172,18 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseAArrayComp(AArrayComp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADecProcedimento(ADecProcedimento node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADecFuncao(ADecFuncao node)
     {
         defaultCase(node);
     }
@@ -220,6 +244,54 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseAExpIdExp(AExpIdExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIdValor(AIdValor node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAValorValor(AValorValor node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAChamadaFuncao(AChamadaFuncao node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAChamadaProcedimento(AChamadaProcedimento node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExpIniListaExp(AExpIniListaExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAVazioListaExp(AVazioListaExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASeparadorExp(ASeparadorExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABlocoExpressoes(ABlocoExpressoes node)
     {
         defaultCase(node);
     }
