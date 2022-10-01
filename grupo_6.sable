@@ -1,10 +1,8 @@
-Package sarapatel;
-
 Helpers
  tudo = [0 .. 0xFFFF];
  digito = ['0' .. '9'];
- binario = '0b' ['0' .. '9']+;
- 
+ digito_bin = '0' | '1';
+ binario = '0b' digito_bin+;
  letra = ['a' .. 'z'] | ['A' .. 'Z'];
  espaco = ' ';
  underscore = '_';
@@ -18,12 +16,13 @@ Helpers
  coment_linha = '--' tudo_menos_rc_nl* eol; 
  coment_bloco = '{' [tudo - '}']* '}';
  comentario = coment_linha | coment_bloco;
- 
+
  vazio = (espaco | rc | nl)+;
  
 Tokens
  numero = ('-'?digito+) | binario;
- decimal = digito+ ',' digito+;
+ decimal = '-'?digito+ ',' digito+;
+ booleano = 'verdadeiro' | 'falso';
  
  // OPERADORES E SIMBOLOS
  ponto_virgula = ';';
@@ -76,4 +75,128 @@ Tokens
 Ignored Tokens
  vazio,
  comentario;
+ 
+ 
+ Productions
+
+ programa = decs_var_const* decs_proc_func+;
+ 
+ decs_var_const = 
+   {dec_var} dec_var
+  |{dec_cons} dec_cons;
+  
+  decs_proc_func =
+   {dec_procedimento} dec_procedimento
+  |{dec_funcao} dec_funcao;
+ 
+ dec_cons = const dois_pontos tipo id_atribuicao ponto_virgula;
+ 
+ dec_var =  var dois_pontos tipo ids ponto_virgula;
+ 
+ ids = 
+ 	{id} id 
+ 	| {id_atribuicao} id_atribuicao;
+ 
+ tipo = 
+  {tipo_base} tipo_base 
+ |{tipo_arr} tipo_base col_esq exp col_dir;
+ 
+ tipo_base = 
+  {tipo_inteiro} tipo_inteiro 
+ |{tipo_booleano} tipo_booleano 
+ |{tipo_real} tipo_real 
+ |{tipo_cadeia} tipo_cadeia;
+ 
+  id_atribuicao = id atribuicao exp;
+  
+  array_comp = col_esq id separador exp col_dir;
+  
+  bloco_comandos = ini_bloco decs_var_const* comando* fim_bloco;
+  
+  dec_procedimento = proced_principal? procedimento dois_pontos id par_esq  parametros par_dir comando; //nao finalizado
+  
+  dec_funcao = funcao dois_pontos tipo id par_esq parametros par_dir exp;
+  
+  parametros = 
+      {parametro_separador_parametro} parametro separador_parametro*
+      |{vazio};
+  
+  separador_parametro = separador parametro;
+  
+  parametro = tipo_parametro id;
+  
+  tipo_parametro = 
+  	 {tipo_base} tipo_base
+  	|{tipo_parametro} tipo_parametro col_esq col_dir;
+  
+  id_exp = 
+  	 {id} id
+  	|{exp} exp;
+  
+  valor = 
+   {id} id 
+  |{valor} valor col_esq exp col_dir;
+  
+  chamada_procedimento = id par_esq lista_exp par_dir;
+  
+  bloco_expressoes = ini_bloco dec_cons* exp fim_bloco;
+  
+  comando = 
+    {declaracao_aberta} decl_aberta 
+    |{declaracao_fechada} decl_fechada;
+
+  decl_aberta = 
+    {cond_se} se par_esq exp par_dir tudo_menos_se
+    |{cond_se_aberta} se par_esq exp par_dir decl_aberta
+    |{cond_se_senao_aberta} se par_esq exp par_dir decl_fechada senao decl_aberta
+    |{enquanto_aberto} enquanto par_esq exp par_dir decl_aberta;
+
+  decl_fechada = 
+    {tudo_menos_se} tudo_menos_se
+    |{cond_se_senao_fechada} se par_esq exp par_dir [esq]:decl_fechada senao [dir]:decl_fechada
+    |{enquanto_fechado} enquanto par_esq exp par_dir decl_fechada;
+
+  tudo_menos_se = 
+    {outra1} id_atribuicao ponto_virgula
+    |{outra2} chamada_procedimento ponto_virgula
+    |{outra3} bloco_comandos; 
+ 
+ exp =
+     {array_comp} array_comp
+    |{ternario} se par_esq exp par_dir [esq]:exp_soma_sub senao [dir]:exp_soma_sub
+    |{or} exp ou exp_soma_sub 
+	|{and} exp e exp_soma_sub 
+    |{igual} exp igual exp_soma_sub
+    |{maior_igual} exp maior_igual exp_soma_sub          
+    |{maior} exp maior_q exp_soma_sub
+    |{exp_soma_sub} exp_soma_sub;
+
+exp_soma_sub = 
+	{fator} fator
+	|{soma} exp_soma_sub soma fator 
+    |{menos} exp_soma_sub menos fator;
+	
+fator =
+	{termo} termo
+	|{mult} fator mult termo     
+    |{div} fator div termo
+    |{mod} fator mod termo;
+
+termo =
+	|{valor} valor
+	|{chamada_funcao} chamada_funcao
+    |{exp} par_esq exp par_dir
+    |{menos_termo} nao termo
+    |{tipagem} tipagem;
+
+tipagem = 
+	{int} numero 
+ 	|{real} decimal 
+ 	|{string} cadeia 
+ 	|{bool} booleano;
+  
+  chamada_funcao = {chamada_funcao} id par_esq lista_exp par_dir; 
+  lista_exp = {lista_exp} lista_exp_vazia?;
+  lista_exp_vazia = {lista_exp_vazia} exp separador_exp; // Dúvida: Por que dá erro com o * no final
+  separador_exp = {separador_exp} separador exp;
  
