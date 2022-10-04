@@ -113,7 +113,7 @@ Ignored Tokens
   
   bloco_comandos = ini_bloco decs_var_const* comando* fim_bloco;
   
-  dec_procedimento = proced_principal? procedimento dois_pontos id par_esq  parametros par_dir comando; //nao finalizado
+  dec_procedimento = proced_principal? procedimento dois_pontos id par_esq  parametros par_dir comando;
   
   dec_funcao = funcao dois_pontos tipo id par_esq parametros par_dir exp;
   
@@ -183,7 +183,7 @@ fator =
     |{mod} fator mod termo;
 
 termo =
-	|{valor} valor
+	{valor} valor
 	|{chamada_funcao} chamada_funcao
     |{exp} par_esq exp par_dir
     |{menos_termo} nao termo
@@ -195,8 +195,8 @@ tipagem =
  	|{string} cadeia 
  	|{bool} booleano;
   
-  chamada_funcao = {chamada_funcao} id par_esq lista_exp par_dir; 
+  chamada_funcao = {chamada_funcao} id par_esq lista_exp par_dir;
   lista_exp = {lista_exp} lista_exp_vazia?;
-  lista_exp_vazia = {lista_exp_vazia} exp separador_exp; // Dúvida: Por que dá erro com o * no final
+  lista_exp_vazia = {lista_exp_vazia} exp separador_exp*;
   separador_exp = {separador_exp} separador exp;
  
