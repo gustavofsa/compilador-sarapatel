@@ -10,7 +10,7 @@ public class Main
 	{
 		try
 		{
-			System.out.println("Escreva um código em Sarapatel:");
+			String arquivo = "teste/teste.srptl";
 
 
 			   // Create a Parser instance.
@@ -18,7 +18,7 @@ public class Main
 			    new Parser(
 			    new Lexer(
 			    new PushbackReader(
-			    new InputStreamReader(System.in), 1024)));
+			    new FileReader(arquivo), 1024)));
 
 
 			   // Parse the input.

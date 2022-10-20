@@ -2,8 +2,7 @@
 
 package sarapatel.lexer;
 
-import node.*;
-import sarapatel.node.InvalidToken;
+import sarapatel.node.*;
 
 @SuppressWarnings("serial")
 public class LexerException extends Exception

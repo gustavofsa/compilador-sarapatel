@@ -3,87 +3,7 @@
 package sarapatel.analysis;
 
 import java.util.*;
-import node.*;
-import sarapatel.node.AArrayComp;
-import sarapatel.node.ADecCons;
-import sarapatel.node.ADecConsDecs;
-import sarapatel.node.ADecVar;
-import sarapatel.node.ADecVarDecs;
-import sarapatel.node.ADivFator;
-import sarapatel.node.AExpIdExp;
-import sarapatel.node.AExpTermo;
-import sarapatel.node.AFatorExp;
-import sarapatel.node.AIdAtribuicao;
-import sarapatel.node.AIdAtribuicaoIds;
-import sarapatel.node.AIdIdExp;
-import sarapatel.node.AIdIds;
-import sarapatel.node.AMenosExp;
-import sarapatel.node.AModFator;
-import sarapatel.node.AMultFator;
-import sarapatel.node.ANumeroTermo;
-import sarapatel.node.AParametro;
-import sarapatel.node.AParametroSeparadorParametro;
-import sarapatel.node.AParametroSeparadorParametroSeparadorParametroVazio;
-import sarapatel.node.AParametros;
-import sarapatel.node.APrograma;
-import sarapatel.node.ASeparadorParametro;
-import sarapatel.node.ASomaExp;
-import sarapatel.node.ATermoFator;
-import sarapatel.node.ATipoBaseTipo;
-import sarapatel.node.ATipoBaseTipoParametro;
-import sarapatel.node.ATipoBooleanoTipoBase;
-import sarapatel.node.ATipoCadeiaTipoBase;
-import sarapatel.node.ATipoInteiroTipoBase;
-import sarapatel.node.ATipoParametroTipoParametro;
-import sarapatel.node.ATipoRealTipoBase;
-import sarapatel.node.ATipoTipo;
-import sarapatel.node.AVazioSeparadorParametroVazio;
-import sarapatel.node.EOF;
-import sarapatel.node.InvalidToken;
-import sarapatel.node.Node;
-import sarapatel.node.Start;
-import sarapatel.node.TAtribuicao;
-import sarapatel.node.TCadeia;
-import sarapatel.node.TColDir;
-import sarapatel.node.TColEsq;
-import sarapatel.node.TComentario;
-import sarapatel.node.TConst;
-import sarapatel.node.TDecimal;
-import sarapatel.node.TDiv;
-import sarapatel.node.TDoisPontos;
-import sarapatel.node.TE;
-import sarapatel.node.TEnquanto;
-import sarapatel.node.TFalso;
-import sarapatel.node.TFimBloco;
-import sarapatel.node.TFuncao;
-import sarapatel.node.TId;
-import sarapatel.node.TIgual;
-import sarapatel.node.TIniBloco;
-import sarapatel.node.TMaiorIgual;
-import sarapatel.node.TMaiorQ;
-import sarapatel.node.TMenos;
-import sarapatel.node.TMod;
-import sarapatel.node.TMult;
-import sarapatel.node.TNao;
-import sarapatel.node.TNumero;
-import sarapatel.node.TOu;
-import sarapatel.node.TParDir;
-import sarapatel.node.TParEsq;
-import sarapatel.node.TPontoVirgula;
-import sarapatel.node.TProcedPrincipal;
-import sarapatel.node.TProcedimento;
-import sarapatel.node.TSe;
-import sarapatel.node.TSenao;
-import sarapatel.node.TSeparador;
-import sarapatel.node.TSoma;
-import sarapatel.node.TTipoArray;
-import sarapatel.node.TTipoBooleano;
-import sarapatel.node.TTipoCadeia;
-import sarapatel.node.TTipoInteiro;
-import sarapatel.node.TTipoReal;
-import sarapatel.node.TVar;
-import sarapatel.node.TVazio;
-import sarapatel.node.TVerdadeiro;
+import sarapatel.node.*;
 
 public class AnalysisAdapter implements Analysis
 {
@@ -161,13 +81,25 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseADecVarDecs(ADecVarDecs node)
+    public void caseADecVarDecsVarConst(ADecVarDecsVarConst node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseADecConsDecs(ADecConsDecs node)
+    public void caseADecConsDecsVarConst(ADecConsDecsVarConst node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADecProcedimentoDecsProcFunc(ADecProcedimentoDecsProcFunc node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADecFuncaoDecsProcFunc(ADecFuncaoDecsProcFunc node)
     {
         defaultCase(node);
     }
@@ -203,7 +135,7 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseATipoTipo(ATipoTipo node)
+    public void caseATipoArrTipo(ATipoArrTipo node)
     {
         defaultCase(node);
     }
@@ -245,25 +177,31 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAParametros(AParametros node)
+    public void caseABlocoComandos(ABlocoComandos node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAParametroSeparadorParametroSeparadorParametroVazio(AParametroSeparadorParametroSeparadorParametroVazio node)
+    public void caseADecProcedimento(ADecProcedimento node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAVazioSeparadorParametroVazio(AVazioSeparadorParametroVazio node)
+    public void caseADecFuncao(ADecFuncao node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAParametroSeparadorParametro(AParametroSeparadorParametro node)
+    public void caseAParametroSeparadorParametroParametros(AParametroSeparadorParametroParametros node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAVazioParametros(AVazioParametros node)
     {
         defaultCase(node);
     }
@@ -305,19 +243,163 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseAFatorExp(AFatorExp node)
+    public void caseAIdValor(AIdValor node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseASomaExp(ASomaExp node)
+    public void caseAValorValor(AValorValor node)
     {
         defaultCase(node);
     }
 
     @Override
-    public void caseAMenosExp(AMenosExp node)
+    public void caseAChamadaProcedimento(AChamadaProcedimento node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABlocoExpressoes(ABlocoExpressoes node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADeclaracaoAbertaComando(ADeclaracaoAbertaComando node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseADeclaracaoFechadaComando(ADeclaracaoFechadaComando node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseACondSeDeclAberta(ACondSeDeclAberta node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseACondSeAbertaDeclAberta(ACondSeAbertaDeclAberta node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseACondSeSenaoAbertaDeclAberta(ACondSeSenaoAbertaDeclAberta node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAEnquantoAbertoDeclAberta(AEnquantoAbertoDeclAberta node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATudoMenosSeDeclFechada(ATudoMenosSeDeclFechada node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseACondSeSenaoFechadaDeclFechada(ACondSeSenaoFechadaDeclFechada node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAEnquantoFechadoDeclFechada(AEnquantoFechadoDeclFechada node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAOutra1TudoMenosSe(AOutra1TudoMenosSe node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAOutra2TudoMenosSe(AOutra2TudoMenosSe node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAOutra3TudoMenosSe(AOutra3TudoMenosSe node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAArrayCompExp(AArrayCompExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATernarioExp(ATernarioExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAOrExp(AOrExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAAndExp(AAndExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIgualExp(AIgualExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMaiorIgualExp(AMaiorIgualExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMaiorExp(AMaiorExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAExpSomaSubExp(AExpSomaSubExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAFatorExpSomaSub(AFatorExpSomaSub node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASomaExpSomaSub(ASomaExpSomaSub node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMenosExpSomaSub(AMenosExpSomaSub node)
     {
         defaultCase(node);
     }
@@ -347,13 +429,85 @@ public class AnalysisAdapter implements Analysis
     }
 
     @Override
-    public void caseANumeroTermo(ANumeroTermo node)
+    public void caseAValorTermo(AValorTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAChamadaFuncaoTermo(AChamadaFuncaoTermo node)
     {
         defaultCase(node);
     }
 
     @Override
     public void caseAExpTermo(AExpTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABlocoExpTermo(ABlocoExpTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAMenosTermoTermo(AMenosTermoTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseATipagemTermo(ATipagemTermo node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAIntTipagem(AIntTipagem node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseARealTipagem(ARealTipagem node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAStringTipagem(AStringTipagem node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseABoolTipagem(ABoolTipagem node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAChamadaFuncaoChamadaFuncao(AChamadaFuncaoChamadaFuncao node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAListaExpListaExp(AListaExpListaExp node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseAListaExpVaziaListaExpVazia(AListaExpVaziaListaExpVazia node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseASeparadorExpSeparadorExp(ASeparadorExpSeparadorExp node)
     {
         defaultCase(node);
     }
@@ -366,6 +520,12 @@ public class AnalysisAdapter implements Analysis
 
     @Override
     public void caseTDecimal(TDecimal node)
+    {
+        defaultCase(node);
+    }
+
+    @Override
+    public void caseTBooleano(TBooleano node)
     {
         defaultCase(node);
     }

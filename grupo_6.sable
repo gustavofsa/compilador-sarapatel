@@ -1,3 +1,5 @@
+Package sarapatel;
+
 Helpers
  tudo = [0 .. 0xFFFF];
  digito = ['0' .. '9'];
@@ -8,6 +10,7 @@ Helpers
  underscore = '_';
  rc = 13;
  nl = 10;
+ tab = 9;
  eol = rc nl | rc | nl;
  senao = 'senao';
  tudo_menos_rc = [tudo - rc];
@@ -17,7 +20,7 @@ Helpers
  coment_bloco = '{' [tudo - '}']* '}';
  comentario = coment_linha | coment_bloco;
 
- vazio = (espaco | rc | nl)+;
+ vazio = (espaco | rc | nl | tab)+;
  
 Tokens
  numero = ('-'?digito+) | binario;
@@ -77,7 +80,7 @@ Ignored Tokens
  comentario;
  
  
- Productions
+Productions
 
  programa = decs_var_const* decs_proc_func+;
  
@@ -113,7 +116,7 @@ Ignored Tokens
   
   bloco_comandos = ini_bloco decs_var_const* comando* fim_bloco;
   
-  dec_procedimento = proced_principal? procedimento dois_pontos id par_esq  parametros par_dir comando;
+  dec_procedimento = proced_principal? procedimento dois_pontos id par_esq parametros par_dir comando;
   
   dec_funcao = funcao dois_pontos tipo id par_esq parametros par_dir exp;
   
@@ -161,7 +164,7 @@ Ignored Tokens
     |{outra2} chamada_procedimento ponto_virgula
     |{outra3} bloco_comandos; 
  
- exp =
+  exp =
      {array_comp} array_comp
     |{ternario} se par_esq exp par_dir [esq]:exp_soma_sub senao [dir]:exp_soma_sub
     |{or} exp ou exp_soma_sub 
@@ -171,32 +174,36 @@ Ignored Tokens
     |{maior} exp maior_q exp_soma_sub
     |{exp_soma_sub} exp_soma_sub;
 
-exp_soma_sub = 
+  exp_soma_sub = 
 	{fator} fator
 	|{soma} exp_soma_sub soma fator 
     |{menos} exp_soma_sub menos fator;
 	
-fator =
+  fator =
 	{termo} termo
 	|{mult} fator mult termo     
     |{div} fator div termo
     |{mod} fator mod termo;
 
-termo =
+  termo =
 	{valor} valor
 	|{chamada_funcao} chamada_funcao
     |{exp} par_esq exp par_dir
+    |{bloco_exp} bloco_expressoes
     |{menos_termo} nao termo
     |{tipagem} tipagem;
 
-tipagem = 
+  tipagem = 
 	{int} numero 
  	|{real} decimal 
  	|{string} cadeia 
  	|{bool} booleano;
   
   chamada_funcao = {chamada_funcao} id par_esq lista_exp par_dir;
+  
   lista_exp = {lista_exp} lista_exp_vazia?;
+  
   lista_exp_vazia = {lista_exp_vazia} exp separador_exp*;
+  
   separador_exp = {separador_exp} separador exp;
- 
+  

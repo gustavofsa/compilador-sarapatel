@@ -2,14 +2,15 @@
 
 package sarapatel.node;
 
-import analysis.*;
-import sarapatel.analysis.Analysis;
+import sarapatel.analysis.*;
 
 @SuppressWarnings("nls")
 public final class AArrayComp extends PArrayComp
 {
     private TColEsq _colEsq_;
-    private PIdExp _idExp_;
+    private TId _id_;
+    private TSeparador _separador_;
+    private PExp _exp_;
     private TColDir _colDir_;
 
     public AArrayComp()
@@ -19,13 +20,19 @@ public final class AArrayComp extends PArrayComp
 
     public AArrayComp(
         @SuppressWarnings("hiding") TColEsq _colEsq_,
-        @SuppressWarnings("hiding") PIdExp _idExp_,
+        @SuppressWarnings("hiding") TId _id_,
+        @SuppressWarnings("hiding") TSeparador _separador_,
+        @SuppressWarnings("hiding") PExp _exp_,
         @SuppressWarnings("hiding") TColDir _colDir_)
     {
         // Constructor
         setColEsq(_colEsq_);
 
-        setIdExp(_idExp_);
+        setId(_id_);
+
+        setSeparador(_separador_);
+
+        setExp(_exp_);
 
         setColDir(_colDir_);
 
@@ -36,7 +43,9 @@ public final class AArrayComp extends PArrayComp
     {
         return new AArrayComp(
             cloneNode(this._colEsq_),
-            cloneNode(this._idExp_),
+            cloneNode(this._id_),
+            cloneNode(this._separador_),
+            cloneNode(this._exp_),
             cloneNode(this._colDir_));
     }
 
@@ -71,16 +80,16 @@ public final class AArrayComp extends PArrayComp
         this._colEsq_ = node;
     }
 
-    public PIdExp getIdExp()
+    public TId getId()
     {
-        return this._idExp_;
+        return this._id_;
     }
 
-    public void setIdExp(PIdExp node)
+    public void setId(TId node)
     {
-        if(this._idExp_ != null)
+        if(this._id_ != null)
         {
-            this._idExp_.parent(null);
+            this._id_.parent(null);
         }
 
         if(node != null)
@@ -93,7 +102,57 @@ public final class AArrayComp extends PArrayComp
             node.parent(this);
         }
 
-        this._idExp_ = node;
+        this._id_ = node;
+    }
+
+    public TSeparador getSeparador()
+    {
+        return this._separador_;
+    }
+
+    public void setSeparador(TSeparador node)
+    {
+        if(this._separador_ != null)
+        {
+            this._separador_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._separador_ = node;
+    }
+
+    public PExp getExp()
+    {
+        return this._exp_;
+    }
+
+    public void setExp(PExp node)
+    {
+        if(this._exp_ != null)
+        {
+            this._exp_.parent(null);
+        }
+
+        if(node != null)
+        {
+            if(node.parent() != null)
+            {
+                node.parent().removeChild(node);
+            }
+
+            node.parent(this);
+        }
+
+        this._exp_ = node;
     }
 
     public TColDir getColDir()
@@ -126,7 +185,9 @@ public final class AArrayComp extends PArrayComp
     {
         return ""
             + toString(this._colEsq_)
-            + toString(this._idExp_)
+            + toString(this._id_)
+            + toString(this._separador_)
+            + toString(this._exp_)
             + toString(this._colDir_);
     }
 
@@ -140,9 +201,21 @@ public final class AArrayComp extends PArrayComp
             return;
         }
 
-        if(this._idExp_ == child)
+        if(this._id_ == child)
         {
-            this._idExp_ = null;
+            this._id_ = null;
+            return;
+        }
+
+        if(this._separador_ == child)
+        {
+            this._separador_ = null;
+            return;
+        }
+
+        if(this._exp_ == child)
+        {
+            this._exp_ = null;
             return;
         }
 
@@ -165,9 +238,21 @@ public final class AArrayComp extends PArrayComp
             return;
         }
 
-        if(this._idExp_ == oldChild)
+        if(this._id_ == oldChild)
         {
-            setIdExp((PIdExp) newChild);
+            setId((TId) newChild);
+            return;
+        }
+
+        if(this._separador_ == oldChild)
+        {
+            setSeparador((TSeparador) newChild);
+            return;
+        }
+
+        if(this._exp_ == oldChild)
+        {
+            setExp((PExp) newChild);
             return;
         }
 

@@ -2,8 +2,7 @@
 
 package sarapatel.parser;
 
-import node.*;
-import sarapatel.node.Token;
+import sarapatel.node.*;
 
 @SuppressWarnings("serial")
 public class ParserException extends Exception

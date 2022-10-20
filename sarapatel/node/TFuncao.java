@@ -2,8 +2,7 @@
 
 package sarapatel.node;
 
-import analysis.*;
-import sarapatel.analysis.Analysis;
+import sarapatel.analysis.*;
 
 @SuppressWarnings("nls")
 public final class TFuncao extends Token
