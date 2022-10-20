@@ -186,7 +186,7 @@ Productions
     |{mod} fator mod termo;
 
   termo =
-	{valor} valor
+	|{valor} valor
 	|{chamada_funcao} chamada_funcao
     |{exp} par_esq exp par_dir
     |{bloco_exp} bloco_expressoes

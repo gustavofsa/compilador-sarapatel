@@ -1,0 +1,697 @@
+Package sarapatel;
+
+Helpers
+ tudo = [0 .. 0xFFFF];
+ digito = ['0' .. '9'];
+ digito_bin = '0' | '1';
+ binario = '0b' digito_bin+;
+ letra = ['a' .. 'z'] | ['A' .. 'Z'];
+ espaco = ' ';
+ underscore = '_';
+ rc = 13;
+ nl = 10;
+ tab = 9;
+ eol = rc nl | rc | nl;
+ senao = 'senao';
+ tudo_menos_rc = [tudo - rc];
+ tudo_menos_rc_nl = [tudo - [rc + nl]];
+ 
+ coment_linha = '--' tudo_menos_rc_nl* eol; 
+ coment_bloco = '{' [tudo - '}']* '}';
+ comentario = coment_linha | coment_bloco;
+
+ vazio = (espaco | rc | nl | tab)+;
+ 
+Tokens
+ numero = ('-'?digito+) | binario;
+ decimal = '-'?digito+ ',' digito+;
+ booleano = 'verdadeiro' | 'falso';
+ 
+ // OPERADORES E SIMBOLOS
+ ponto_virgula = ';';
+ col_esq = '[';
+ col_dir = ']';
+ par_esq = '(';
+ par_dir = ')';
+ soma = '+';
+ menos = '-';
+ mult = '*';
+ div = '/';
+ mod = '%';
+ maior_q = '>';
+ maior_igual = '>=';
+ igual = '=';
+ e = 'e';
+ ou = 'ou';
+ nao = 'nao';
+ separador = '|';
+ dois_pontos = ':';
+ atribuicao = '<<';
+ proced_principal = '>>';
+
+ // PALAVRAS RESERVADAS
+ var = 'var';
+ const = 'const';
+ tipo_inteiro = 'inteiro';
+ tipo_real = 'real';
+ tipo_booleano = 'booleano';
+ tipo_cadeia = 'cadeia';
+ ini_bloco = 'comece';
+ fim_bloco = 'termine';
+ enquanto = 'enquanto';
+ se = 'se';
+ senao = 'senao';
+ verdadeiro = 'verdadeiro';
+ falso = 'falso';
+ funcao = 'funcao';
+ procedimento = 'procedimento';
+ 
+ tipo_array = 'inteiro' | 'real' | 'booleano' | 'cadeia' ( '[' (digito+ | binario) ']' )+;
+ 
+ id = (letra | underscore | 'size' | 'imprima' | 'leia')(letra | underscore | digito)*;
+
+ cadeia = ''' ([tudo_menos_rc - '''])+ ''';
+ 
+ vazio = vazio;
+ comentario = comentario;
+ 
+Ignored Tokens
+ vazio,
+ comentario;
+ 
+ 
+Productions 
+
+    programa
+         {-> P.programa  } =
+
+     {aprograma1} P.a_decs_proc_func 
+         {-> New programa ([  ], [ a_decs_proc_func.decs_proc_func  ] )  }   |
+
+     {aprograma2} P.a_decs_var_const P.a_decs_proc_func 
+         {-> New programa ([ a_decs_var_const.decs_var_const  ], [ a_decs_proc_func.decs_proc_func  ] )  }  
+     ;
+
+    decs_var_const
+         {-> P.decs_var_const  } =
+
+     {dec_var} dec_var 
+         {-> New decs_var_const.dec_var (dec_var  )  }   |
+
+     {dec_cons} dec_cons 
+         {-> New decs_var_const.dec_cons (dec_cons  )  }  
+     ;
+
+    decs_proc_func
+         {-> P.decs_proc_func  } =
+
+     {dec_procedimento} dec_procedimento 
+         {-> New decs_proc_func.dec_procedimento (dec_procedimento  )  }   |
+
+     {dec_funcao} dec_funcao 
+         {-> New decs_proc_func.dec_funcao (dec_funcao  )  }  
+     ;
+
+    dec_cons
+         {-> P.dec_cons  } =
+
+     const dois_pontos tipo id_atribuicao ponto_virgula 
+         {-> New dec_cons (const , dois_pontos , tipo , id_atribuicao , ponto_virgula  )  }  
+     ;
+
+    dec_var
+         {-> P.dec_var  } =
+
+     var dois_pontos tipo ids ponto_virgula 
+         {-> New dec_var (var , dois_pontos , tipo , ids , ponto_virgula  )  }  
+     ;
+
+    ids
+         {-> P.ids  } =
+
+     {id} id 
+         {-> New ids.id (id  )  }   |
+
+     {id_atribuicao} id_atribuicao 
+         {-> New ids.id_atribuicao (id_atribuicao  )  }  
+     ;
+
+    tipo
+         {-> P.tipo  } =
+
+     {tipo_base} tipo_base 
+         {-> New tipo.tipo_base (tipo_base  )  }   |
+
+     {tipo_arr} tipo_base col_esq exp col_dir 
+         {-> New tipo.tipo_arr (tipo_base , col_esq , exp , col_dir  )  }  
+     ;
+
+    tipo_base
+         {-> P.tipo_base  } =
+
+     {tipo_inteiro} tipo_inteiro 
+         {-> New tipo_base.tipo_inteiro (tipo_inteiro  )  }   |
+
+     {tipo_booleano} tipo_booleano 
+         {-> New tipo_base.tipo_booleano (tipo_booleano  )  }   |
+
+     {tipo_real} tipo_real 
+         {-> New tipo_base.tipo_real (tipo_real  )  }   |
+
+     {tipo_cadeia} tipo_cadeia 
+         {-> New tipo_base.tipo_cadeia (tipo_cadeia  )  }  
+     ;
+
+    id_atribuicao
+         {-> P.id_atribuicao  } =
+
+     id atribuicao exp 
+         {-> New id_atribuicao (id , atribuicao , exp  )  }  
+     ;
+
+    array_comp
+         {-> P.array_comp  } =
+
+     col_esq id separador exp col_dir 
+         {-> New array_comp (col_esq , id , separador , exp , col_dir  )  }  
+     ;
+
+    bloco_comandos
+         {-> P.bloco_comandos  } =
+
+     {ablococomandos1} ini_bloco fim_bloco 
+         {-> New bloco_comandos (ini_bloco , [  ], [  ], fim_bloco  )  }   |
+
+     {ablococomandos2} ini_bloco P.a_decs_var_const fim_bloco 
+         {-> New bloco_comandos (ini_bloco , [ a_decs_var_const.decs_var_const  ], [  ], fim_bloco  )  }   |
+
+     {ablococomandos3} ini_bloco P.a_comando fim_bloco 
+         {-> New bloco_comandos (ini_bloco , [  ], [ a_comando.comando  ], fim_bloco  )  }   |
+
+     {ablococomandos4} ini_bloco P.a_decs_var_const P.a_comando fim_bloco 
+         {-> New bloco_comandos (ini_bloco , [ a_decs_var_const.decs_var_const  ], [ a_comando.comando  ], fim_bloco  )  }  
+     ;
+
+    dec_procedimento
+         {-> P.dec_procedimento  } =
+
+     {adecprocedimento1} procedimento dois_pontos id par_esq parametros par_dir comando 
+         {-> New dec_procedimento (Null , procedimento , dois_pontos , id , par_esq , parametros , par_dir , comando  )  }   |
+
+     {adecprocedimento2} proced_principal procedimento dois_pontos id par_esq parametros par_dir comando 
+         {-> New dec_procedimento (proced_principal , procedimento , dois_pontos , id , par_esq , parametros , par_dir , comando  )  }  
+     ;
+
+    dec_funcao
+         {-> P.dec_funcao  } =
+
+     funcao dois_pontos tipo id par_esq parametros par_dir exp 
+         {-> New dec_funcao (funcao , dois_pontos , tipo , id , par_esq , parametros , par_dir , exp  )  }  
+     ;
+
+    parametros
+         {-> P.parametros  } =
+
+     {aparametroseparadorparametroparametros1} parametro 
+         {-> New parametros.parametro_separador_parametro (parametro , [  ] )  }   |
+
+     {aparametroseparadorparametroparametros2} parametro P.a_separador_parametro 
+         {-> New parametros.parametro_separador_parametro (parametro , [ a_separador_parametro.separador_parametro  ] )  }   |
+
+     {vazio} 
+         {-> New parametros.vazio ( )  }  
+     ;
+
+    separador_parametro
+         {-> P.separador_parametro  } =
+
+     separador parametro 
+         {-> New separador_parametro (separador , parametro  )  }  
+     ;
+
+    parametro
+         {-> P.parametro  } =
+
+     tipo_parametro id 
+         {-> New parametro (tipo_parametro , id  )  }  
+     ;
+
+    tipo_parametro
+         {-> P.tipo_parametro  } =
+
+     {tipo_base} tipo_base 
+         {-> New tipo_parametro.tipo_base (tipo_base  )  }   |
+
+     {tipo_parametro} tipo_parametro col_esq col_dir 
+         {-> New tipo_parametro.tipo_parametro (tipo_parametro , col_esq , col_dir  )  }  
+     ;
+
+    id_exp
+         {-> P.id_exp  } =
+
+     {id} id 
+         {-> New id_exp.id (id  )  }   |
+
+     {exp} exp 
+         {-> New id_exp.exp (exp  )  }  
+     ;
+
+    valor
+         {-> P.valor  } =
+
+     {id} id 
+         {-> New valor.id (id  )  }   |
+
+     {valor} valor col_esq exp col_dir 
+         {-> New valor.valor (valor , col_esq , exp , col_dir  )  }  
+     ;
+
+    chamada_procedimento
+         {-> P.chamada_procedimento  } =
+
+     {alistaexplistaexp11} [elem1]: id [elem2]: par_esq [elem3]: par_dir 
+         {-> New chamada_procedimento (elem1 , elem2 , New lista_exp.lista_exp (Null  ), elem3  )  }   |
+
+     {alistaexplistaexp21} [elem1]: id [elem2]: par_esq [lista_exp_alistaexplistaexp2_lista_exp_vazia3]: lista_exp_vazia [elem4]: par_dir 
+         {-> New chamada_procedimento (elem1 , elem2 , New lista_exp.lista_exp (lista_exp_alistaexplistaexp2_lista_exp_vazia3  ), elem4  )  }  
+     ;
+
+    bloco_expressoes
+         {-> P.bloco_expressoes  } =
+
+     {ablocoexpressoes1} ini_bloco exp fim_bloco 
+         {-> New bloco_expressoes (ini_bloco , [  ], exp , fim_bloco  )  }   |
+
+     {ablocoexpressoes2} ini_bloco P.a_dec_cons exp fim_bloco 
+         {-> New bloco_expressoes (ini_bloco , [ a_dec_cons.dec_cons  ], exp , fim_bloco  )  }  
+     ;
+
+    comando
+         {-> P.comando  } =
+
+     {declaracao_aberta} decl_aberta 
+         {-> New comando.declaracao_aberta (decl_aberta  )  }   |
+
+     {declaracao_fechada} decl_fechada 
+         {-> New comando.declaracao_fechada (decl_fechada  )  }  
+     ;
+
+    decl_aberta
+         {-> P.decl_aberta  } =
+
+     {cond_se} se par_esq exp par_dir tudo_menos_se 
+         {-> New decl_aberta.cond_se (se , par_esq , exp , par_dir , tudo_menos_se  )  }   |
+
+     {cond_se_aberta} se par_esq exp par_dir decl_aberta 
+         {-> New decl_aberta.cond_se_aberta (se , par_esq , exp , par_dir , decl_aberta  )  }   |
+
+     {cond_se_senao_aberta} se par_esq exp par_dir decl_fechada senao decl_aberta 
+         {-> New decl_aberta.cond_se_senao_aberta (se , par_esq , exp , par_dir , decl_fechada , senao , decl_aberta  )  }   |
+
+     {enquanto_aberto} enquanto par_esq exp par_dir decl_aberta 
+         {-> New decl_aberta.enquanto_aberto (enquanto , par_esq , exp , par_dir , decl_aberta  )  }  
+     ;
+
+    decl_fechada
+         {-> P.decl_fechada  } =
+
+     {tudo_menos_se} tudo_menos_se 
+         {-> New decl_fechada.tudo_menos_se (tudo_menos_se  )  }   |
+
+     {cond_se_senao_fechada} se par_esq exp par_dir [esq]: decl_fechada senao [dir]: decl_fechada 
+         {-> New decl_fechada.cond_se_senao_fechada (se , par_esq , exp , par_dir , esq , senao , dir  )  }   |
+
+     {enquanto_fechado} enquanto par_esq exp par_dir decl_fechada 
+         {-> New decl_fechada.enquanto_fechado (enquanto , par_esq , exp , par_dir , decl_fechada  )  }  
+     ;
+
+    tudo_menos_se
+         {-> P.tudo_menos_se  } =
+
+     {outra1} id_atribuicao ponto_virgula 
+         {-> New tudo_menos_se.outra1 (id_atribuicao , ponto_virgula  )  }   |
+
+     {outra2} chamada_procedimento ponto_virgula 
+         {-> New tudo_menos_se.outra2 (chamada_procedimento , ponto_virgula  )  }   |
+
+     {outra3} bloco_comandos 
+         {-> New tudo_menos_se.outra3 (bloco_comandos  )  }  
+     ;
+
+    exp
+         {-> P.exp  } =
+
+     {array_comp} array_comp 
+         {-> New exp.array_comp (array_comp  )  }   |
+
+     {ternario} se par_esq exp par_dir [esq]: exp_soma_sub senao [dir]: exp_soma_sub 
+         {-> New exp.ternario (se , par_esq , exp , par_dir , esq , senao , dir  )  }   |
+
+     {or} exp ou exp_soma_sub 
+         {-> New exp.or (exp , ou , exp_soma_sub  )  }   |
+
+     {and} exp e exp_soma_sub 
+         {-> New exp.and (exp , e , exp_soma_sub  )  }   |
+
+     {igual} exp igual exp_soma_sub 
+         {-> New exp.igual (exp , igual , exp_soma_sub  )  }   |
+
+     {maior_igual} exp maior_igual exp_soma_sub 
+         {-> New exp.maior_igual (exp , maior_igual , exp_soma_sub  )  }   |
+
+     {maior} exp maior_q exp_soma_sub 
+         {-> New exp.maior (exp , maior_q , exp_soma_sub  )  }   |
+
+     {exp_soma_sub} exp_soma_sub 
+         {-> New exp.exp_soma_sub (exp_soma_sub  )  }  
+     ;
+
+    exp_soma_sub
+         {-> P.exp_soma_sub  } =
+
+     {fator} fator 
+         {-> New exp_soma_sub.fator (fator  )  }   |
+
+     {soma} exp_soma_sub soma fator 
+         {-> New exp_soma_sub.soma (exp_soma_sub , soma , fator  )  }   |
+
+     {menos} exp_soma_sub menos fator 
+         {-> New exp_soma_sub.menos (exp_soma_sub , menos , fator  )  }  
+     ;
+
+    fator
+         {-> P.fator  } =
+
+     {termo} termo 
+         {-> New fator.termo (termo  )  }   |
+
+     {mult} fator mult termo 
+         {-> New fator.mult (fator , mult , termo  )  }   |
+
+     {div} fator div termo 
+         {-> New fator.div (fator , div , termo  )  }   |
+
+     {mod} fator mod termo 
+         {-> New fator.mod (fator , mod , termo  )  }  
+     ;
+
+    termo
+         {-> P.termo  } =
+         
+     {valor} valor 
+         {-> New termo.valor (valor  )  }   |
+
+     {chamada_funcao} chamada_funcao 
+         {-> New termo.chamada_funcao (chamada_funcao  )  }   |
+
+     {exp} par_esq exp par_dir 
+         {-> New termo.exp (par_esq , exp , par_dir  )  }   |
+
+     {bloco_exp} bloco_expressoes 
+         {-> New termo.bloco_exp (bloco_expressoes  )  }   |
+
+     {menos_termo} nao termo 
+         {-> New termo.menos_termo (nao , termo  )  }   |
+
+     {tipagem} tipagem 
+         {-> New termo.tipagem (tipagem  )  }  
+     ;
+
+    tipagem
+         {-> P.tipagem  } =
+
+     {int} numero 
+         {-> New tipagem.int (numero  )  }   |
+
+     {real} decimal 
+         {-> New tipagem.real (decimal  )  }   |
+
+     {string} cadeia 
+         {-> New tipagem.string (cadeia  )  }   |
+
+     {bool} booleano 
+         {-> New tipagem.bool (booleano  )  }  
+     ;
+
+    chamada_funcao
+         {-> P.chamada_funcao  } =
+
+     {chamada_funcaoa_alistaexplistaexp11} [elem1]: id [elem2]: par_esq [elem3]: par_dir 
+         {-> New chamada_funcao.chamada_funcao (elem1 , elem2 , New lista_exp.lista_exp (Null  ), elem3  )  }   |
+
+     {chamada_funcaoa_alistaexplistaexp21} [elem1]: id [elem2]: par_esq [lista_exp_alistaexplistaexp2_lista_exp_vazia3]: lista_exp_vazia [elem4]: par_dir 
+         {-> New chamada_funcao.chamada_funcao (elem1 , elem2 , New lista_exp.lista_exp (lista_exp_alistaexplistaexp2_lista_exp_vazia3  ), elem4  )  }  
+     ;
+
+    lista_exp_vazia
+         {-> P.lista_exp_vazia  } =
+
+     {alistaexpvazialistaexpvazia1} exp 
+         {-> New lista_exp_vazia.lista_exp_vazia (exp , [  ] )  }   |
+
+     {alistaexpvazialistaexpvazia2} exp P.a_separador_exp 
+         {-> New lista_exp_vazia.lista_exp_vazia (exp , [ a_separador_exp.separador_exp  ] )  }  
+     ;
+
+    separador_exp
+         {-> P.separador_exp  } =
+
+     {separador_exp} separador exp 
+         {-> New separador_exp.separador_exp (separador , exp  )  }  
+     ;
+
+    a_decs_proc_func
+         {-> P.decs_proc_func*  } =
+
+     {terminal} P.decs_proc_func 
+         {-> [ P.decs_proc_func.decs_proc_func  ]  }   |
+
+     {non_terminal} P.a_decs_proc_func P.decs_proc_func 
+         {-> [ a_decs_proc_func.decs_proc_func, P.decs_proc_func.decs_proc_func  ]  }  
+     ;
+
+    a_decs_var_const
+         {-> P.decs_var_const*  } =
+
+     {terminal} P.decs_var_const 
+         {-> [ P.decs_var_const.decs_var_const  ]  }   |
+
+     {non_terminal} P.a_decs_var_const P.decs_var_const 
+         {-> [ a_decs_var_const.decs_var_const, P.decs_var_const.decs_var_const  ]  }  
+     ;
+
+    a_comando
+         {-> P.comando*  } =
+
+     {terminal} P.comando 
+         {-> [ P.comando.comando  ]  }   |
+
+     {non_terminal} P.a_comando P.comando 
+         {-> [ a_comando.comando, P.comando.comando  ]  }  
+     ;
+
+    a_separador_parametro
+         {-> P.separador_parametro*  } =
+
+     {terminal} P.separador_parametro 
+         {-> [ P.separador_parametro.separador_parametro  ]  }   |
+
+     {non_terminal} P.a_separador_parametro P.separador_parametro 
+         {-> [ a_separador_parametro.separador_parametro, P.separador_parametro.separador_parametro  ]  }  
+     ;
+
+    a_dec_cons
+         {-> P.dec_cons*  } =
+
+     {terminal} P.dec_cons 
+         {-> [ P.dec_cons.dec_cons  ]  }   |
+
+     {non_terminal} P.a_dec_cons P.dec_cons 
+         {-> [ a_dec_cons.dec_cons, P.dec_cons.dec_cons  ]  }  
+     ;
+
+    a_separador_exp
+         {-> P.separador_exp*  } =
+
+     {terminal} P.separador_exp 
+         {-> [ P.separador_exp.separador_exp  ]  }   |
+
+     {non_terminal} P.a_separador_exp P.separador_exp 
+         {-> [ a_separador_exp.separador_exp, P.separador_exp.separador_exp  ]  }  
+     ;
+
+Abstract Syntax Tree
+    programa =
+     decs_var_const* decs_proc_func+ 
+     ;
+
+    decs_var_const =
+     {dec_var} dec_var | 
+     {dec_cons} dec_cons 
+     ;
+
+    decs_proc_func =
+     {dec_procedimento} dec_procedimento | 
+     {dec_funcao} dec_funcao 
+     ;
+
+    dec_cons =
+     const dois_pontos tipo id_atribuicao ponto_virgula 
+     ;
+
+    dec_var =
+     var dois_pontos tipo ids ponto_virgula 
+     ;
+
+    ids =
+     {id} id | 
+     {id_atribuicao} id_atribuicao 
+     ;
+
+    tipo =
+     {tipo_base} tipo_base | 
+     {tipo_arr} tipo_base col_esq exp col_dir 
+     ;
+
+    tipo_base =
+     {tipo_inteiro} tipo_inteiro | 
+     {tipo_booleano} tipo_booleano | 
+     {tipo_real} tipo_real | 
+     {tipo_cadeia} tipo_cadeia 
+     ;
+
+    id_atribuicao =
+     id atribuicao exp 
+     ;
+
+    array_comp =
+     col_esq id separador exp col_dir 
+     ;
+
+    bloco_comandos =
+     ini_bloco decs_var_const* comando* fim_bloco 
+     ;
+
+    dec_procedimento =
+     proced_principal? procedimento dois_pontos id par_esq parametros par_dir comando 
+     ;
+
+    dec_funcao =
+     funcao dois_pontos tipo id par_esq parametros par_dir exp 
+     ;
+
+    parametros =
+     {parametro_separador_parametro} parametro separador_parametro* | 
+     {vazio} 
+     ;
+
+    separador_parametro =
+     separador parametro 
+     ;
+
+    parametro =
+     tipo_parametro id 
+     ;
+
+    tipo_parametro =
+     {tipo_base} tipo_base | 
+     {tipo_parametro} tipo_parametro col_esq col_dir 
+     ;
+
+    id_exp =
+     {id} id | 
+     {exp} exp 
+     ;
+
+    valor =
+     {id} id | 
+     {valor} valor col_esq exp col_dir 
+     ;
+
+    chamada_procedimento =
+     id par_esq lista_exp par_dir 
+     ;
+
+    bloco_expressoes =
+     ini_bloco dec_cons* exp fim_bloco 
+     ;
+
+    comando =
+     {declaracao_aberta} decl_aberta | 
+     {declaracao_fechada} decl_fechada 
+     ;
+
+    decl_aberta =
+     {cond_se} se par_esq exp par_dir tudo_menos_se | 
+     {cond_se_aberta} se par_esq exp par_dir decl_aberta | 
+     {cond_se_senao_aberta} se par_esq exp par_dir decl_fechada senao decl_aberta | 
+     {enquanto_aberto} enquanto par_esq exp par_dir decl_aberta 
+     ;
+
+    decl_fechada =
+     {tudo_menos_se} tudo_menos_se | 
+     {cond_se_senao_fechada} se par_esq exp par_dir [esq]: decl_fechada senao [dir]: decl_fechada | 
+     {enquanto_fechado} enquanto par_esq exp par_dir decl_fechada 
+     ;
+
+    tudo_menos_se =
+     {outra1} id_atribuicao ponto_virgula | 
+     {outra2} chamada_procedimento ponto_virgula | 
+     {outra3} bloco_comandos 
+     ;
+
+    exp =
+     {array_comp} array_comp | 
+     {ternario} se par_esq exp par_dir [esq]: exp_soma_sub senao [dir]: exp_soma_sub | 
+     {or} exp ou exp_soma_sub | 
+     {and} exp e exp_soma_sub | 
+     {igual} exp igual exp_soma_sub | 
+     {maior_igual} exp maior_igual exp_soma_sub | 
+     {maior} exp maior_q exp_soma_sub | 
+     {exp_soma_sub} exp_soma_sub 
+     ;
+
+    exp_soma_sub =
+     {fator} fator | 
+     {soma} exp_soma_sub soma fator | 
+     {menos} exp_soma_sub menos fator 
+     ;
+
+    fator =
+     {termo} termo | 
+     {mult} fator mult termo | 
+     {div} fator div termo | 
+     {mod} fator mod termo 
+     ;
+
+    termo =
+     {valor} valor | 
+     {chamada_funcao} chamada_funcao | 
+     {exp} par_esq exp par_dir | 
+     {bloco_exp} bloco_expressoes | 
+     {menos_termo} nao termo | 
+     {tipagem} tipagem 
+     ;
+
+    tipagem =
+     {int} numero | 
+     {real} decimal | 
+     {string} cadeia | 
+     {bool} booleano 
+     ;
+
+    chamada_funcao =
+     {chamada_funcao} id par_esq lista_exp par_dir 
+     ;
+
+    lista_exp =
+     {lista_exp} lista_exp_vazia? 
+     ;
+
+    lista_exp_vazia =
+     {lista_exp_vazia} exp separador_exp* 
+     ;
+
+    separador_exp =
+     {separador_exp} separador exp 
+     ;
